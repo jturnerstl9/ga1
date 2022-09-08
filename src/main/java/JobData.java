@@ -5,10 +5,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -79,14 +76,13 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toUpperCase().contains(value)) {
                 jobs.add(row);
             }
         }
 
         return jobs;
     }
-
     /**
      * Search all columns for the given term
      *
@@ -94,14 +90,23 @@ public class JobData {
      * @return      List of all jobs with at least one field containing the value
      */
     public static ArrayList<HashMap<String, String>> findByValue(String value) {
-
         // load data, if not already loaded
         loadData();
+        // ArrayList
+        ArrayList<HashMap<String, String>> allJobs = JobData.findAll();
+        ArrayList<HashMap<String, String>> searchMatches = new ArrayList<>();
 
-        // TODO - implement this method
-        return null;
+        for (HashMap<String, String> row: allJobs) {
+            for (Map.Entry<String, String> column: row.entrySet()) {
+                if (column.getValue().toUpperCase().contains(value)) {
+                    if (Arrays.asList(searchMatches).contains(row)) {
+                    }
+                    searchMatches.add(row);
+                }
+            }
+        }
+        return searchMatches;
     }
-
     /**
      * Read in data from a CSV file and store it in a list
      */
